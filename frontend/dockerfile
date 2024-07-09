@@ -1,0 +1,25 @@
+FROM node:14
+
+# Establecer el directorio de trabajo en el contenedor
+WORKDIR /app
+
+# Copiar package.json y package-lock.json para instalar dependencias primero
+COPY package*.json ./
+
+# Instalar las dependencias
+RUN npm install
+
+# Copiar el resto de la aplicación
+COPY . .
+
+# Construir la aplicación
+RUN npm run build
+
+# Instalar el servidor para servir la aplicación
+RUN npm install -g serve
+
+# Exponer el puerto en el que la aplicación estará corriendo
+EXPOSE 5173
+
+# Comando para iniciar la aplicación
+CMD ["serve", "-s", "build"]
